@@ -1,0 +1,47 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Clean project",
+            "type": "shell",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "command": "rm -rf ${config:build_dir}"
+        },
+        {
+            "label": "Cofigure",
+            "type": "shell",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "command": "cmake -B ${config:build_dir}",
+        },
+        {
+            "label": "Build CMake with Test",
+            "type": "shell",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "command": "cmake --build ${config:build_dir}",
+            "dependsOn": [
+                "Cofigure"
+            ]
+        },
+        {
+            "label": "Ctest",
+            "type": "shell",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "command": "cd ${config:build_dir} && ctest",
+            "dependsOn": [
+                "Build CMake with Test"
+            ]
+        }
+    ]
+}
