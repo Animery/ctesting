@@ -1,57 +1,28 @@
+/**********************************************\
+*
+*  Mikhail Shaimukhamedov
+*  mixail.any@gmail.com
+*
+\**********************************************/
+
+#include "simple_test.hpp"
+
 #include <cstdlib>
-#include <cstring>
-#include <string_view>
-#include <functional>
-#include <cassert>
 
-int test_1()
+int test_1([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
 {
     return EXIT_SUCCESS;
 }
 
-int test_2()
+int test_2([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
 {
-    return EXIT_SUCCESS;
-}
-
-using TestFunction = std::function<int()>;
-
-struct TestMapping
-{
-    std::string_view name;
-    TestFunction func;
-};
-
-namespace
-{
-    const TestMapping tests[] = {
-        {"test_1", &test_1},
-        {"test_2", &test_2},
-    };
-
-    TestFunction getTest(std::string_view testName)
-    {
-        for (auto &test : tests)
-        {
-            if (testName == test.name)
-            {
-                return test.func;
-            }
-        }
-
-        assert(!"cant find test");
-        return []() -> int
-        { return EXIT_FAILURE; };
-    }
-} // namespace
-
-int main(int argc, char *argv[])
-{
-    if (argc > 1)
-    {
-        auto func = getTest(argv[1]);
-        return func();
-    }
-
     return EXIT_FAILURE;
+}
+
+void initializeTests()
+{
+    auto& tests = TestStorage::instance();
+
+    tests.addTest("test_1", &test_1);
+    tests.addTest("test_2", &test_2);
 }
